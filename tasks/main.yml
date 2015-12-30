@@ -27,3 +27,8 @@
             group=zabbix
             mode=0755
   notify: restart zabbix-agent
+
+# setup mysql monitoring if enabled
+- include: monit-mysql.yml
+  when: zabbix_agent_monit_mysql_enable == "yes"
+  tags: tag-monit-mysql

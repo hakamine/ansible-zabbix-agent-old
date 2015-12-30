@@ -2,5 +2,9 @@
 # defaults file for agent
 zabbix_version: 2.4
 
-zabbix_agent_server: 127.0.0.1
-zabbix_agent_listenport: 10050
+# configure for mysql monitoring
+zabbix_agent_monit_mysql_enable: no
+
+# zabbix_agentd_conf parameters
+zabbix_agent_conf_server: 127.0.0.1
+zabbix_agent_conf_listenport: 10050

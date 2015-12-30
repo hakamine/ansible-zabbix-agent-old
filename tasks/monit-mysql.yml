@@ -1,0 +1,44 @@
+---
+
+- name: generate password locally (requires pwgen)
+  local_action: command pwgen 8
+  register: pwgen_result
+  sudo: no
+
+- debug: msg="Generated password is {{ pwgen_result.stdout }}"
+
+# (if the user already exists, this should update the password)
+- name: "create mysql user zabbix-agent@localhost"
+  mysql_user:
+    name: "zabbix-agent"
+    host: "localhost"
+    password: "{{ pwgen_result.stdout }}"
+    priv: "*.*:USAGE"
+    state: "present"
+  sudo: yes
+
+- name: "create mysql user zabbix-agent@127.0.0.1"
+  mysql_user:
+    name: "zabbix-agent"
+    host: "127.0.0.1"
+    password: "{{ pwgen_result.stdout }}"
+    priv: "*.*:USAGE"
+    state: "present"
+  sudo: yes
+
+- name: "create directory /var/lib/zabbix"
+  file:
+    path: "/var/lib/zabbix"
+    owner: "zabbix"
+    group: "zabbix"
+    state: "directory"
+  sudo: yes
+
+- name: "create .my.cnf in /var/lib/zabbix"
+  template:
+    src: "my.cnf.j2"
+    dest: "/var/lib/zabbix/.my.cnf"
+    owner: "zabbix"
+    group: "zabbix"
+    mode: "0640"
+  sudo: yes
