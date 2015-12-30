@@ -1,0 +1,21 @@
+---
+# tasks file for agent
+
+- name: "set up zabbix ubuntu repo"
+  apt_repository: repo="deb http://repo.zabbix.com/zabbix/{{ zabbix_version }}/ubuntu/ {{ ansible_distribution_release }} main"
+                  state=present
+
+- name: "set up zabbix ubuntu src repo"
+  apt_repository: repo="deb-src http://repo.zabbix.com/zabbix/{{ zabbix_version }}/ubuntu/ {{ ansible_distribution_release }} main"
+                  state=present
+
+- name: "Install gpg key"
+  apt_key: id=79EA5ED4
+           url=http://repo.zabbix.com/zabbix-official-repo.key
+
+# Run the equivalent of "apt-get update" as a separate step
+- apt: update_cache=yes
+
+- name: "Install zabbix-agent package"
+  apt: pkg=zabbix-agent
+       state=present
