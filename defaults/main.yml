@@ -1,3 +1,6 @@
 ---
 # defaults file for agent
 zabbix_version: 2.4
+
+zabbix_agent_server: 127.0.0.1
+zabbix_agent_listenport: 10050

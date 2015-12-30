@@ -19,3 +19,11 @@
 - name: "Install zabbix-agent package"
   apt: pkg=zabbix-agent
        state=present
+
+- name: "Write zabbix-agent config file"
+  template: src=zabbix_agentd.conf.j2
+            dest=/etc/zabbix/zabbix_agentd.conf
+            owner=zabbix
+            group=zabbix
+            mode=0755
+  notify: restart zabbix-agent
